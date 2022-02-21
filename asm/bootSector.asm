@@ -4,11 +4,11 @@ mov [BOOT_DISK], dl
 CODE_SEG equ GDT_Code - GDT_Start
 DATA_SEG equ GDT_Data - GDT_Start
 
-cli
-lgdt[GDT_Desc]
-mov eax, cr0
+cli			; pauses all interrupts
+lgdt[GDT_Desc]		
+mov eax, cr0		
 or eax, 1
-mov cr0, eax
+mov cr0, eax		; sets bit flag to allow protected mode to start 
 jmp CODE_SEG:start_protected_mode
 jmp $
 
