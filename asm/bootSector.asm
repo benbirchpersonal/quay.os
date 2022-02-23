@@ -47,15 +47,36 @@ start_protected_mode:
 	; BEN YOU FORGOT TO SET THE REGISTERS WHAT ARE YOU DOING
 	; NOW YOU CANT EVEN REMEMBER WHICH REGISTERS NEED TO BE SET
 	mov eax, 0
-	mov sp, eax
-	mov bp, eax
-	mov si, eax
-	
+	mov sp, eax			; zero out stack pointer and
+	mov bp, eax			; base pointer to prevent crash on protected mode load
+	mov si, eax	
+	mov ds, eax
+	mov ss, eax
 
 	mov al, 'A'
 	mov ah, 0x0f
-	mov [0xb8000], ax
+	mov [0xb8000], ax	; write an A to the display
 	jmp $
+
+
+print_string:
+	mov ah, 0Eh
+	mov bx, $
+
+.repeat:
+	lodsb
+	cmp al, 0
+	je .done
+	or ax, 00001100b
+	mov[0xb8000], ax
+	add bx, 32
+
+.done
+	jmp $
+
+
+
+
 
 BOOT_DISK:
 	db 0
